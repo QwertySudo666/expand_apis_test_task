@@ -4,7 +4,11 @@ import com.jammy.business.adapter.UserRepositoryAdapter;
 import com.jammy.domain.models.User;
 import com.jammy.entities.UserEntity;
 import com.jammy.repository.UserRepository;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class PersistentUserRepository implements UserRepositoryAdapter {
@@ -41,5 +45,19 @@ public class PersistentUserRepository implements UserRepositoryAdapter {
                 user.getUsername(),
                 user.getPassword()
         );
+    }
+}
+
+@Converter(autoApply = true)
+class UuidConverter implements AttributeConverter<UUID, String> {
+
+    @Override
+    public String convertToDatabaseColumn(UUID uuid) {
+        return (uuid == null) ? null : uuid.toString();
+    }
+
+    @Override
+    public UUID convertToEntityAttribute(String uuidString) {
+        return (uuidString == null) ? null : UUID.fromString(uuidString);
     }
 }
