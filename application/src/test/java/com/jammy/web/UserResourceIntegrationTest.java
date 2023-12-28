@@ -4,14 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jammy.business.facade.UserFacade;
 import com.jammy.domain.models.User;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -21,12 +19,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //@WebMvcTest(UserResource.class)
-@SpringBootTest
-@AutoConfigureMockMvc
+//@SpringBootTest
+//@AutoConfigureMockMvc
+@WebMvcTest(UserResource.class)
+@AutoConfigureWebMvc
 public class UserResourceIntegrationTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    private MockMvc mockMvc;// = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -48,13 +48,12 @@ public class UserResourceIntegrationTest {
         User user = new User();
         user.setUsername("testUser");
         user.setPassword("testPassword");
-
-        Mockito.when(userFacade.save(Mockito.any(User.class))).thenReturn(user);
+//        Mockito.when(userFacade.save(Mockito.any(User.class))).thenReturn(user);
 
         mockMvc.perform(post("/api/user/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test

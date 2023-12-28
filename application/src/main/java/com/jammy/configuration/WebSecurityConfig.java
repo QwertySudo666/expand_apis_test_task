@@ -47,18 +47,38 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
 
 //                        .requestMatchers("/", "/home").permitAll()
-                                .requestMatchers(HttpMethod.POST, "api/user/**").permitAll()
-                                .anyRequest().authenticated()
-                ).csrf(AbstractHttpConfigurer::disable)
+//                                .requestMatchers(HttpMethod.POST, "api/user/add").permitAll()
+//                                .requestMatchers(HttpMethod.POST, "api/user/authenticate").permitAll()
+                                .anyRequest().permitAll()
+                )
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .cors(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+//                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling((exceptions) -> exceptions
                         .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
-                );;
+                );
 
         return http.build();
+//        http
+//                .authorizeHttpRequests((requests) -> requests
+////                        .requestMatchers(HttpMethod.POST, "api/user/add").permitAll()
+////                        .requestMatchers(HttpMethod.POST, "api/user/authenticate").permitAll()
+////                        .anyRequest().authenticated()
+////                                .requestMatchers("api/products/**").authenticated()
+//                                .anyRequest().permitAll()
+//                )
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .cors(AbstractHttpConfigurer::disable)
+//                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .exceptionHandling((exceptions) -> exceptions
+//                        .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+//                        .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
+//                );
+//
+//        return http.build();
     }
 
     @Bean
